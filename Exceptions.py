@@ -1,0 +1,2 @@
+class ArraySizeError(Exception):
+    None
