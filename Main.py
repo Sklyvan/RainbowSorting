@@ -8,12 +8,8 @@ from GUI_Functions import KEY_PRESSED
 from Sorting_Algorithms import InsertionSort, CocktailShakerSort, BubbleSort
 import ctypes
 
-ARRAY_SIZE = int(input("Array Size: "))
-print("\n")
-Algorithm = ("Insertion Sort", "Cocktail Shaker Sort", "Bubble Sort")
-for i in range (len(Algorithm)):
-    print(i+1, Algorithm[i])
-AL = int(input("Algorithm: "))
+ARRAY_SIZE = 200 # Max value is 1000.
+AL = 2 # 1 for Insertion Sort, 2 for CocktailShkaerSort and 3 for Bubble Sort.
 
 os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (625, 200) # Starting the game screen on the center.
 user32 = ctypes.windll.user32

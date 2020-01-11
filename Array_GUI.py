@@ -14,7 +14,7 @@ RGB_SIZE = len(RGB)
 class Visualized_Array:
     def __init__(self, Size, X, Y, Width, Height, CompleteArray=True):
         if Size > 1000: # Sizes bigger than 1000 take too much time sorting and displaying the array.
-            raise ArraySizeError(f"Array size is too big, size can't be bigger than 10000. Selected size is {Size}.")
+            raise ArraySizeError(f"Array size is too big, size can't be bigger than 1000. Selected size is {Size}.")
         else:
             self.x = X
             self.y = Y
