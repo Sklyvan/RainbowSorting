@@ -19,6 +19,10 @@ def InsertionSort(MyArray, Win, Font, DrawSort=True):
                     sys.exit()
                 else:
                     MyArray.Draw(Win, Font)
+
+    if not MyArray.isSorted:
+        MyArray.Draw_Check_Sorted(Win, Font)
+
     MyArray.isSorted = True
     return MyArray
 

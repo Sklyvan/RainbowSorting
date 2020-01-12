@@ -8,6 +8,7 @@ from GUI_Functions import KEY_PRESSED
 from Sorting_Algorithms import InsertionSort, CocktailShakerSort, BubbleSort, TimSort
 from Exceptions import ArraySizeError
 from math import log
+import time
 
 ARRAY_SIZE = 100 # Max value is 1500.
 AL = 1 # 1 for Insertion Sort, 2 for Cocktail Shaker Sort, 3 for Bubble Sort and 4 for Tim Sort.
@@ -47,6 +48,8 @@ if AL == 4: # In case of TimSort, checking if the array size is a power of two.
 
 Information_Text = [str(f"Array Size: {ARRAY_SIZE}"), str(f"Current Algorithm: {ALS[AL-1]}")] # Creating the text which contains information like the name of the algorithm and the size of the array.
 MyArray = Visualized_Array(ARRAY_SIZE, 5, WIN_SIZE[1], 1900 / ARRAY_SIZE, WIN_SIZE[1] - 30, Information_Text, CompleteArray=True, Sound=SOUND) # Creating the array.
+
+time.sleep(3)
 
 while MAIN_LOOP:
     KEY = KEY_PRESSED()

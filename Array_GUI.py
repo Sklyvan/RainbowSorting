@@ -1,11 +1,15 @@
 import random
 import pygame
-import pyaudio
 from Exceptions import ArraySizeError
+from GUI_Functions import KEY_PRESSED
+from time import sleep
 import winsound as BeepSound
+from Sound_Generator import ToneGenerator
 
-Sound_Duration = 15 # Miliseconds.
+Generator = ToneGenerator()
+Sound_Duration = 0.03 # Time (seconds) to play at each step
 Sound_Frequency_Range = [i for i in range(225, 1000)]
+Amplitude = 0.50  # Amplitude of the waveform
 
 RED_PINK = [[255, 0, i] for i in range(256)]
 PINK_BLUE = [[i, 0, 255] for i in reversed(range(256))]
@@ -72,9 +76,9 @@ class Visualized_Array:
             Element_Colour = RGB[self.Array[i]*self.Jumps%RGB_SIZE] # Getting the colour value depending on our value, here we don't use the normalized value, since we want to acces to a position of an array and we can't do Array[0.7].
             pygame.draw.rect(Win, Element_Colour, Rectangle) # Drawing on the surface, with the colour, and the generated rectangle.
             if self.Array[i] in self.Moving_Elements and self.Sound and self.isSorted is False: # If we are drawing the moving element, and Sound is enabled, and the array isn't sorted, we make the corresponding sound.
-                try:
-                    BeepSound.Beep(Sound_Frequency_Range[self.Array[i]*self.Jumps%len(Sound_Frequency_Range)], Sound_Duration)
-                except OSError: # I don't fucking know why sometimes I get an error.
+                # BeepSound.Beep(Sound_Frequency_Range[self.Array[i]*self.Jumps%len(Sound_Frequency_Range)], Sound_Duration)
+                Generator.play(Sound_Frequency_Range[self.Array[i]*self.Audio_Jumps%len(Sound_Frequency_Range)], Sound_Duration, Amplitude)
+                while Generator.is_playing():
                     None
         Accesses_Text = Font.render(f"Array Accesses: {self.Current_Accesses}", True, (255, 255, 255)) # Drawing the text with the accesses to the array.
         Win.blit(Accesses_Text, (10, 10))
@@ -83,6 +87,34 @@ class Visualized_Array:
         Win.blit(Rendered_1, (400, 10))
         Win.blit(Rendered_2, (720, 10))
         pygame.display.update() # Updating screen.
+
+    def Draw_Check_Sorted(self, Win, Font):
+        Win.fill((0, 0, 0)) # Cleaning everything on the screen.
+        Accesses_Text = Font.render(f"Array Accesses: {self.Current_Accesses}", True, (255, 255, 255))  # Drawing the text with the accesses to the array.
+        Win.blit(Accesses_Text, (10, 10))
+        Rendered_1 = Font.render(self.Information_Text[0], True, (255, 255, 255))  # Array size.
+        Rendered_2 = Font.render(self.Information_Text[1], True, (255, 255, 255))  # Current algorithm.
+        Win.blit(Rendered_1, (400, 10))
+        Win.blit(Rendered_2, (720, 10))
+        self.Normalized_Array = [i / max(self.Array) for i in self.Array]  # Creating an array with values between [0, 1].
+        for i in range(self.Size):
+            Current_Element = self.Normalized_Array[i] # Getting the value of the element.
+            Rectangle = pygame.Rect(self.x + i*self.Width, self.y, self.Width, -self.Height*Current_Element) # Drawing the rectangle, x position increases at every iteration and Height depends on the value of the element.
+            # Height is negative to draw in up direction.
+            Element_Colour = (48, 235, 92) # Getting the colour value depending on our value, here we don't use the normalized value, since we want to acces to a position of an array and we can't do Array[0.7].
+            pygame.draw.rect(Win, Element_Colour, Rectangle) # Drawing on the surface, with the colour, and the generated rectangle.
+            if self.Sound: # If Sound is enabled, we make the corresponding sound.
+                # BeepSound.Beep(Sound_Frequency_Range[self.Array[i]*self.Jumps%len(Sound_Frequency_Range)], Sound_Duration)
+                Generator.play(Sound_Frequency_Range[self.Array[i]*self.Audio_Jumps%len(Sound_Frequency_Range)], Sound_Duration, Amplitude)
+                while Generator.is_playing():
+                    None
+            KEY = KEY_PRESSED()
+            if KEY == "QUIT":
+                break
+                pygame.quit()
+                sys.exit()
+            else:
+                pygame.display.update() # Updating screen.
 
     def __len__(self):
         return self.Size
