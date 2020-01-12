@@ -1,18 +1,19 @@
-import sys
 import os
+import sys
+import ctypes
 import pygame
 from pygame.locals import *
 from Array_GUI import Visualized_Array
 from GUI_Functions import KEY_PRESSED
 from Sorting_Algorithms import InsertionSort, CocktailShakerSort, BubbleSort, TimSort
-import ctypes
-from math import log
 from Exceptions import ArraySizeError
+from math import log
 
-ARRAY_SIZE = 512 # Max value is 1500.
-AL = 1 # 1 for Insertion Sort, 2 for CocktailShkaerSort, 3 for Bubble Sort and 4 for TimSort.
+ARRAY_SIZE = 100 # Max value is 1500.
+AL = 1 # 1 for Insertion Sort, 2 for Cocktail Shaker Sort, 3 for Bubble Sort and 4 for Tim Sort.
+SOUND = True
 
-os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (625, 200) # Starting the game screen on the center.
+os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (625, 200) # Starting the screen on the center.
 user32 = ctypes.windll.user32
 SCREENSIZE = user32.GetSystemMetrics(0), user32.GetSystemMetrics(1)
 FLAGS = FULLSCREEN | DOUBLEBUF # Fullscreen mode.
@@ -29,6 +30,7 @@ pygame.mouse.set_visible(False) # Hidding the mouse.
 pygame.event.set_allowed([QUIT, KEYDOWN]) # Adding the two onlu allowed keys, for better perfomance.
 FONT = pygame.font.SysFont('Consolas', 30) # Using the font to count iterations.
 MAIN_LOOP = True
+ALS = ["Insertion Sort", "Cocktail Shaker Sort", "Bubble Sort", "Tim Sort"]
 
 def isIntegrer(N):
 	N = str(N)
@@ -38,12 +40,14 @@ def isIntegrer(N):
 	else:
 		return False
 
-if AL == 4:
+if AL == 4: # In case of TimSort, checking if the array size is a power of two.
     if not isIntegrer(log(ARRAY_SIZE, 2)):
         raise ArraySizeError("When using Tim Sort, array size should be power of two. (64, 128, 256, 512)")
         MAIN_LOOP = False
 
-MyArray = Visualized_Array(ARRAY_SIZE, 5, WIN_SIZE[1], 1900 / ARRAY_SIZE, WIN_SIZE[1] - 20, CompleteArray=True)
+Information_Text = [str(f"Array Size: {ARRAY_SIZE}"), str(f"Current Algorithm: {ALS[AL-1]}")] # Creating the text which contains information like the name of the algorithm and the size of the array.
+MyArray = Visualized_Array(ARRAY_SIZE, 5, WIN_SIZE[1], 1900 / ARRAY_SIZE, WIN_SIZE[1] - 30, Information_Text, CompleteArray=True, Sound=SOUND) # Creating the array.
+
 while MAIN_LOOP:
     KEY = KEY_PRESSED()
     if KEY == "QUIT":

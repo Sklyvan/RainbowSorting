@@ -19,38 +19,41 @@ def InsertionSort(MyArray, Win, Font, DrawSort=True):
                     sys.exit()
                 else:
                     MyArray.Draw(Win, Font)
+    MyArray.isSorted = True
     return MyArray
 
-def CocktailShakerSort(MyArray, Win, Font):
+def CocktailShakerSort(MyArray, Win, Font, DrawSort=True):
     for i in range(len(MyArray.Array) - 1, 0, -1):
         Swapped = False
         for j in range(i, 0, -1):
             if MyArray.Array[j] < MyArray.Array[j - 1]:
                 MyArray.Array[j], MyArray.Array[j - 1] = MyArray.Array[j - 1], MyArray.Array[j]
                 MyArray.Moving_Elements = [MyArray.Array[j], MyArray.Array[j - 1]]
-                KEY = KEY_PRESSED()
-                if KEY == "QUIT":
-                    pygame.quit()
-                    sys.exit()
-                else:
-                    MyArray.Draw(Win, Font, extraAcceses=2) # Since we are moving two elements on the array, we have to add 2 acceses instead of one.
-                Swapped = True
+                if DrawSort:
+                    KEY = KEY_PRESSED()
+                    if KEY == "QUIT":
+                        pygame.quit()
+                        sys.exit()
+                    else:
+                        MyArray.Draw(Win, Font, extraAcceses=2) # Since we are moving two elements on the array, we have to add 2 acceses instead of one.
+                    Swapped = True
         for j in range(i):
             if MyArray.Array[j] > MyArray.Array[j + 1]:
                 MyArray.Array[j], MyArray.Array[j + 1] = MyArray.Array[j + 1], MyArray.Array[j]
                 MyArray.Moving_Elements = [MyArray.Array[j], MyArray.Array[j + 1]]
-                KEY = KEY_PRESSED()
-                if KEY == "QUIT":
-                    pygame.quit()
-                    sys.exit()
-                else:
-                    MyArray.Draw(Win, Font, extraAcceses=2) # Since we are moving two elements on the array, we have to add 2 acceses instead of one.
-                Swapped = True
+                if DrawSort:
+                    KEY = KEY_PRESSED()
+                    if KEY == "QUIT":
+                        pygame.quit()
+                        sys.exit()
+                    else:
+                        MyArray.Draw(Win, Font, extraAcceses=2) # Since we are moving two elements on the array, we have to add 2 acceses instead of one.
+                    Swapped = True
         if not Swapped:
             MyArray.isSorted = True
             return MyArray
 
-def BubbleSort(MyArray, Win, Font):
+def BubbleSort(MyArray, Win, Font, DrawSort=True):
     Swapped = True
     while Swapped:
         Swapped = False
@@ -58,16 +61,16 @@ def BubbleSort(MyArray, Win, Font):
             if MyArray.Array[i] > MyArray.Array[i + 1]:
                 MyArray.Array[i], MyArray.Array[i + 1] = MyArray.Array[i + 1], MyArray.Array[i]
                 MyArray.Moving_Elements = [MyArray.Array[i], MyArray.Array[i + 1]]
-                KEY = KEY_PRESSED()
-                if KEY == "QUIT":
-                    pygame.quit()
-                    sys.exit()
-                else:
-                    MyArray.Draw(Win, Font, extraAcceses=2) # Since we are moving two elements on the array, we have to add 2 acceses instead of one.
-                Swapped = True
+                if DrawSort:
+                    KEY = KEY_PRESSED()
+                    if KEY == "QUIT":
+                        pygame.quit()
+                        sys.exit()
+                    else:
+                        MyArray.Draw(Win, Font, extraAcceses=2) # Since we are moving two elements on the array, we have to add 2 acceses instead of one.
+                    Swapped = True
     MyArray.isSorted = True
     return MyArray
-
 
 RUN = 32
 

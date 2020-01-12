@@ -2,12 +2,10 @@ import random
 import pygame
 import pyaudio
 from Exceptions import ArraySizeError
-from Sound_Generator import ToneGenerator
+import winsound as BeepSound
 
-Sound_Amplitude = 0.50
-Sound_Duration = 0.10
-Sound_Frequency_Range = [i for i in range(100, 1000)]
-Generator = ToneGenerator()
+Sound_Duration = 15 # Miliseconds.
+Sound_Frequency_Range = [i for i in range(225, 1000)]
 
 RED_PINK = [[255, 0, i] for i in range(256)]
 PINK_BLUE = [[i, 0, 255] for i in reversed(range(256))]
@@ -19,7 +17,18 @@ RGB = RED_PINK + PINK_BLUE + BLUE_AQUA + AQUA_GREEN + GREEN_YELLOW + YELLOW_RED
 RGB_SIZE = len(RGB)
 
 class Visualized_Array:
-    def __init__(self, Size, X, Y, Width, Height, CompleteArray=True):
+    def __init__(self, Size, X, Y, Width, Height, Information_Text, CompleteArray=True, Sound=False):
+        """
+
+        :param Size: Number of elements on the array.
+        :param X: Initial x position for the first element on the array.
+        :param Y: Initial y position for the first element on the array.
+        :param Width: Width of the biggest element on the array.
+        :param Height: Height of the biggest element on the array.
+        :param Information_Text: Array storing the current Sorting Algorithm and the array size.
+        :param CompleteArray: Boolean value. If True, we are going to create the array with the numbers from 1 to Size randomly shuffled, if is False, we add 'Size' random numbers from 1 to Size, so numbers can be repeated.
+        :param Sound: Boolean to know if we want to generate sounds.
+        """
         if Size > 1500: # Sizes bigger than 1000 take too much time sorting and displaying the array.
             raise ArraySizeError(f"Array size is too big, size can't be bigger than 1500. Selected size is {Size}.")
         else:
@@ -30,37 +39,50 @@ class Visualized_Array:
             self.Size = Size
             self.Current_Accesses = 0 # Using that to know how many accesses to the array we have made.
             self.isComplete = CompleteArray
-            self.Jumps = RGB_SIZE//Size
-            self.Audio_Jumps = len(Sound_Frequency_Range)//Size
-            self.Moving_Elements = []
-            self.isSorted = False
+            self.Jumps = RGB_SIZE//Size # Depending on the size of the array we acces to the RGB colours with more or less steps.
+            self.Audio_Jumps = len(Sound_Frequency_Range)//Size # Same as RGB.
+            self.Information_Text = Information_Text
+            self.Moving_Elements = [] # Knowing the values of the current elements that we are moving.
+            self.isSorted = False # Using it to know if we have to execute the sorting algorithm.
+            self.Sound = Sound
             if CompleteArray: # If the array has to be complete.
                 self.Array = [i for i in range(1, Size+1)] # Generating array with numbers from one to Size.
                 random.shuffle(self.Array) # Moving the numbers to random positions.
-            else:
+            else: # If not, we just add Size times a random value between 1 and Size.
                 self.Array = []
                 for _ in range(Size):
                     self.Array.append(random.randint(1, Size))
             self.Normalized_Array = [i/max(self.Array) for i in self.Array] # Creating an array with values between [0, 1].
 
-    def Draw(self, Win, Font, isSorted=False, extraAcceses=1, Sound=False):
-        Win.fill((0, 0, 0))
-        if not isSorted:
+    def Draw(self, Win, Font, extraAcceses=1):
+        """
+
+        :param Win: PyGame surface, to draw the array.
+        :param Font: Font to write the information.
+        :param extraAcceses: Using it to count the array accesses, sometimes we move more than one element so we have to add more than one to the counter.
+        """
+        Win.fill((0, 0, 0)) # Cleaning everything on the screen.
+        if not self.isSorted: # If not sorted, we add the accesses.
             self.Current_Accesses += extraAcceses
         self.Normalized_Array = [i / max(self.Array) for i in self.Array]  # Creating an array with values between [0, 1].
         for i in range(self.Size):
-            Current_Element = self.Normalized_Array[i]
-            Rectangle = pygame.Rect(self.x + i*self.Width, self.y, self.Width, -self.Height*Current_Element)
-            Element_Colour = RGB[self.Array[i]*self.Jumps%RGB_SIZE]
-            pygame.draw.rect(Win, Element_Colour, Rectangle)
-            if self.Array[i] in self.Moving_Elements and Sound:
+            Current_Element = self.Normalized_Array[i] # Getting the value of the element.
+            Rectangle = pygame.Rect(self.x + i*self.Width, self.y, self.Width, -self.Height*Current_Element) # Drawing the rectangle, x position increases at every iteration and Height depends on the value of the element.
+            # Height is negative to draw in up direction.
+            Element_Colour = RGB[self.Array[i]*self.Jumps%RGB_SIZE] # Getting the colour value depending on our value, here we don't use the normalized value, since we want to acces to a position of an array and we can't do Array[0.7].
+            pygame.draw.rect(Win, Element_Colour, Rectangle) # Drawing on the surface, with the colour, and the generated rectangle.
+            if self.Array[i] in self.Moving_Elements and self.Sound and self.isSorted is False: # If we are drawing the moving element, and Sound is enabled, and the array isn't sorted, we make the corresponding sound.
                 try:
-                    Generator.play(Sound_Frequency_Range[self.Array[i]*self.Jumps%len(Sound_Frequency_Range)], Sound_Duration, Sound_Amplitude)
-                except OSError:
+                    BeepSound.Beep(Sound_Frequency_Range[self.Array[i]*self.Jumps%len(Sound_Frequency_Range)], Sound_Duration)
+                except OSError: # I don't fucking know why sometimes I get an error.
                     None
-        Accesses_Text = Font.render(f"Array Accesses: {self.Current_Accesses}", True, (255, 255, 255))
+        Accesses_Text = Font.render(f"Array Accesses: {self.Current_Accesses}", True, (255, 255, 255)) # Drawing the text with the accesses to the array.
         Win.blit(Accesses_Text, (10, 10))
-        pygame.display.update()
+        Rendered_1 = Font.render(self.Information_Text[0], True, (255, 255, 255)) # Array size.
+        Rendered_2 = Font.render(self.Information_Text[1], True, (255, 255, 255)) # Current algorithm.
+        Win.blit(Rendered_1, (400, 10))
+        Win.blit(Rendered_2, (720, 10))
+        pygame.display.update() # Updating screen.
 
     def __len__(self):
         return self.Size
