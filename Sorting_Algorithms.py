@@ -1,5 +1,7 @@
 import pygame
 import os, sys
+import copy
+import random
 from pygame.locals import *
 from GUI_Functions import KEY_PRESSED
 from Exceptions import ArraySizeError
@@ -54,6 +56,9 @@ def CocktailShakerSort(MyArray, Win, Font, DrawSort=True):
                         MyArray.Draw(Win, Font, extraAcceses=2) # Since we are moving two elements on the array, we have to add 2 acceses instead of one.
                     Swapped = True
         if not Swapped:
+            if not MyArray.isSorted:
+                MyArray.Draw_Check_Sorted(Win, Font)
+
             MyArray.isSorted = True
             return MyArray
 
@@ -73,6 +78,10 @@ def BubbleSort(MyArray, Win, Font, DrawSort=True):
                     else:
                         MyArray.Draw(Win, Font, extraAcceses=2) # Since we are moving two elements on the array, we have to add 2 acceses instead of one.
                     Swapped = True
+
+    if not MyArray.isSorted:
+        MyArray.Draw_Check_Sorted(Win, Font)
+
     MyArray.isSorted = True
     return MyArray
 
@@ -84,6 +93,7 @@ def Tim_InsertionSort(MyArray, Left, Right, Win, Font):
         j = i - 1
         while MyArray.Array[j] > Temp and j >= Left:
             MyArray.Array[j + 1] = MyArray.Array[j]
+            MyArray.Moving_Elements = [MyArray.Array[j], MyArray.Array[j + 1]]
             j -= 1
             KEY = KEY_PRESSED()
             if KEY == "QUIT":
@@ -92,6 +102,7 @@ def Tim_InsertionSort(MyArray, Left, Right, Win, Font):
             else:
                 MyArray.Draw(Win, Font)
         MyArray.Array[j + 1] = Temp
+        MyArray.Moving_Elements = [MyArray.Array[j + 1]]
         KEY = KEY_PRESSED()
         if KEY == "QUIT":
             pygame.quit()
@@ -112,6 +123,7 @@ def Merge(MyArray, l, m, r, Win, Font):
     while i < LEN_1 and j < LEN_2:
         if Left[i] <= Right[j]:
             MyArray.Array[k] = Left[i]
+            MyArray.Moving_Elements = [MyArray.Array[k]]
             i += 1
             KEY = KEY_PRESSED()
             if KEY == "QUIT":
@@ -121,6 +133,7 @@ def Merge(MyArray, l, m, r, Win, Font):
                 MyArray.Draw(Win, Font)
         else:
             MyArray.Array[k] = Right[j]
+            MyArray.Moving_Elements = [MyArray.Array[k]]
             j += 1
             KEY = KEY_PRESSED()
             if KEY == "QUIT":
@@ -131,6 +144,7 @@ def Merge(MyArray, l, m, r, Win, Font):
         k += 1
     while i < LEN_1:
         MyArray.Array[k] = Left[i]
+        MyArray.Moving_Elements = [MyArray.Array[k]]
         k += 1
         i += 1
         KEY = KEY_PRESSED()
@@ -141,6 +155,7 @@ def Merge(MyArray, l, m, r, Win, Font):
             MyArray.Draw(Win, Font)
     while j < LEN_2:
         MyArray.Array[k] = Right[j]
+        MyArray.Moving_Elements = [MyArray.Array[k]]
         k += 1
         j += 1
         KEY = KEY_PRESSED()
@@ -169,6 +184,91 @@ def TimSort(MyArray, Win, Font):
                     MyArray.Draw(Win, Font)
                 Merge(MyArray, Left, Mid, Right, Win, Font)
             Size = 2 * Size
+
+    if not MyArray.isSorted:
+        MyArray.Draw_Check_Sorted(Win, Font)
+
+    MyArray.isSorted = True
+    return MyArray
+
+
+def CycleSort(MyArray, Win, Font):
+    if not MyArray.isSorted:
+        Writes = 0
+        for cycleStart in range(0, len(MyArray) - 1):
+            Item = MyArray.Array[cycleStart]
+            Position = cycleStart
+            for i in range(cycleStart + 1, len(MyArray)):
+                if MyArray.Array[i] < Item:
+                    Position += 1
+            if Position == cycleStart:
+                continue
+
+            while Item == MyArray.Array[Position]:
+                Position += 1
+            MyArray.Array[Position], Item = Item, MyArray.Array[Position]
+            KEY = KEY_PRESSED()
+            if KEY == "QUIT":
+                pygame.quit()
+                sys.exit()
+            else:
+                MyArray.Draw(Win, Font, extraAcceses=2)
+            Writes += 1
+
+            while Position != cycleStart:
+                Position = cycleStart
+                for i in range(cycleStart + 1, len(MyArray)):
+                    if MyArray.Array[i] < Item:
+                        Position += 1
+                while Item == MyArray.Array[Position]:
+                    Position += 1
+                MyArray.Array[Position], Item = Item, MyArray.Array[Position]
+                KEY = KEY_PRESSED()
+                if KEY == "QUIT":
+                    pygame.quit()
+                    sys.exit()
+                else:
+                    MyArray.Draw(Win, Font, extraAcceses=2)
+                Writes += 1
+
+    if not MyArray.isSorted:
+        MyArray.Draw_Check_Sorted(Win, Font)
+
+    MyArray.isSorted = True
+    return MyArray
+
+def rotLeft(Array, n=1):
+    return Array[n % len(Array):] + Array[:n % len(Array)]
+
+def Rotate(MyArray, rotationTimes, Win, Font):
+    if not MyArray.isSorted:
+        for _ in range(rotationTimes):
+            MyArray.Array = rotLeft(MyArray.Array)
+            KEY = KEY_PRESSED()
+            if KEY == "QUIT":
+                pygame.quit()
+                sys.exit()
+            else:
+                MyArray.Draw(Win, Font)
+
+        MyArray.Draw_Check_Sorted(Win, Font)
+
+    MyArray.isSorted = True
+    return MyArray
+
+def ElementsIncreaser(MyArray, increaseSize, Win, Font):
+    if not MyArray.isSorted:
+        for _ in range(increaseSize):
+            for arrayPosition in range(len(MyArray)):
+                MyArray.Array[arrayPosition] += 1
+                KEY = KEY_PRESSED()
+                if KEY == "QUIT":
+                    pygame.quit()
+                    sys.exit()
+                else:
+                    MyArray.Draw(Win, Font)
+
+        MyArray.Draw_Check_Sorted(Win, Font)
 
     MyArray.isSorted = True
     return MyArray
