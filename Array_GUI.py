@@ -3,6 +3,7 @@ import pygame
 from Exceptions import ArraySizeError
 from GUI_Functions import KEY_PRESSED
 from time import sleep as WaitTime
+from math import ceil
 import winsound as BeepSound
 from Sound_Generator import ToneGenerator
 
@@ -33,8 +34,8 @@ class Visualized_Array:
         :param CompleteArray: Boolean value. If True, we are going to create the array with the numbers from 1 to Size randomly shuffled, if is False, we add 'Size' random numbers from 1 to Size, so numbers can be repeated.
         :param Sound: Boolean to know if we want to generate sounds.
         """
-        if Size > 1500: # Sizes bigger than 1000 take too much time sorting and displaying the array.
-            raise ArraySizeError(f"Array size is too big, size can't be bigger than 1500. Selected size is {Size}.")
+        if Size > 10000: # Sizes bigger than 1000 take too much time sorting and displaying the array.
+            raise ArraySizeError(f"Array size is too big, size can't be bigger than 10000. Selected size is {Size}.")
         else:
             self.x = X
             self.y = Y
@@ -43,7 +44,7 @@ class Visualized_Array:
             self.Size = Size
             self.Current_Accesses = 0 # Using that to know how many accesses to the array we have made.
             self.isComplete = CompleteArray
-            self.Jumps = round(RGB_SIZE/Size) # Depending on the size of the array we acces to the RGB colours with more or less steps.
+            self.Jumps = ceil(RGB_SIZE/Size) # Depending on the size of the array we acces to the RGB colours with more or less steps.
             self.Audio_Jumps = len(Sound_Frequency_Range)//Size # Same as RGB.
             self.Information_Text = Information_Text
             self.Moving_Elements = [] # Knowing the values of the current elements that we are moving.

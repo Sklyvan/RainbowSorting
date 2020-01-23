@@ -87,7 +87,7 @@ def BubbleSort(MyArray, Win, Font, DrawSort=True):
 
 RUN = 32
 
-def Tim_InsertionSort(MyArray, Left, Right, Win, Font):
+def Tim_InsertionSort(MyArray, Left, Right, Win, Font, DrawSort):
     for i in range(Left + 1, Right + 1):
         Temp = MyArray.Array[i]
         j = i - 1
@@ -100,7 +100,8 @@ def Tim_InsertionSort(MyArray, Left, Right, Win, Font):
                 pygame.quit()
                 sys.exit()
             else:
-                MyArray.Draw(Win, Font)
+                if DrawSort:
+                    MyArray.Draw(Win, Font)
         MyArray.Array[j + 1] = Temp
         MyArray.Moving_Elements = [MyArray.Array[j + 1]]
         KEY = KEY_PRESSED()
@@ -108,9 +109,10 @@ def Tim_InsertionSort(MyArray, Left, Right, Win, Font):
             pygame.quit()
             sys.exit()
         else:
-            MyArray.Draw(Win, Font)
+            if DrawSort:
+                MyArray.Draw(Win, Font)
 
-def Merge(MyArray, l, m, r, Win, Font):
+def Merge(MyArray, l, m, r, Win, Font, DrawSort):
     LEN_1, LEN_2 = m - l + 1, r - m
     Left, Right = [], []
     for i in range(0, LEN_1):
@@ -140,7 +142,8 @@ def Merge(MyArray, l, m, r, Win, Font):
                 pygame.quit()
                 sys.exit()
             else:
-                MyArray.Draw(Win, Font)
+                if DrawSort:
+                    MyArray.Draw(Win, Font)
         k += 1
     while i < LEN_1:
         MyArray.Array[k] = Left[i]
@@ -152,7 +155,8 @@ def Merge(MyArray, l, m, r, Win, Font):
             pygame.quit()
             sys.exit()
         else:
-            MyArray.Draw(Win, Font)
+            if DrawSort:
+                MyArray.Draw(Win, Font)
     while j < LEN_2:
         MyArray.Array[k] = Right[j]
         MyArray.Moving_Elements = [MyArray.Array[k]]
@@ -163,14 +167,15 @@ def Merge(MyArray, l, m, r, Win, Font):
             pygame.quit()
             sys.exit()
         else:
-            MyArray.Draw(Win, Font)
+            if DrawSort:
+                MyArray.Draw(Win, Font)
 
 
-def TimSort(MyArray, Win, Font):
+def TimSort(MyArray, Win, Font, DrawSort=True):
     if not MyArray.isSorted:
         N = len(MyArray.Array)
         for i in range(0, N, RUN):
-            Tim_InsertionSort(MyArray, i, min((i + 31), (N - 1)), Win, Font)
+            Tim_InsertionSort(MyArray, i, min((i + 31), (N - 1)), Win, Font, DrawSort)
         Size = RUN
         while Size < N:
             for Left in range(0, N, 2 * Size):
@@ -181,8 +186,9 @@ def TimSort(MyArray, Win, Font):
                     pygame.quit()
                     sys.exit()
                 else:
-                    MyArray.Draw(Win, Font)
-                Merge(MyArray, Left, Mid, Right, Win, Font)
+                    if DrawSort:
+                        MyArray.Draw(Win, Font)
+                Merge(MyArray, Left, Mid, Right, Win, Font, DrawSort)
             Size = 2 * Size
 
     if not MyArray.isSorted:

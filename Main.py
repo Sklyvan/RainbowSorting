@@ -10,9 +10,9 @@ from Exceptions import ArraySizeError
 from time import sleep as WaitTime
 from math import log
 
-ARRAY_SIZE = 100 # Max value is 1500.
-AL = 1 # 1 for Insertion Sort, 2 for Cocktail Shaker Sort, 3 for Bubble Sort, 4 for Tim Sort, 5 for Cycle Sort, 6 for Rotation and 7 for Elements Increaser.
-SOUND = True # Sound just works at 100% on Insertion Sort.
+ARRAY_SIZE = 1024 # Max value is 10000.
+AL = 4 # 1 for Insertion Sort, 2 for Cocktail Shaker Sort, 3 for Bubble Sort, 4 for Tim Sort, 5 for Cycle Sort, 6 for Rotation and 7 for Elements Increaser.
+SOUND = False # Sound just works at 100% on Insertion Sort.
 
 user32 = ctypes.windll.user32
 SCREENSIZE = user32.GetSystemMetrics(0), user32.GetSystemMetrics(1)
@@ -56,7 +56,7 @@ while MAIN_LOOP:
         sys.exit()
     else:
         if AL == 1:
-            InsertionSort(MyArray, WIN, FONT).Draw(WIN, FONT, True)
+            InsertionSort(MyArray, WIN, FONT, False).Draw(WIN, FONT, True)
         elif AL == 2:
             CocktailShakerSort(MyArray, WIN, FONT).Draw(WIN, FONT, True)
         elif AL == 3:
