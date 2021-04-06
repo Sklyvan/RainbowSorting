@@ -11,7 +11,7 @@ pip install pyaudio
 ```
 
 ## Usage
-With PyGame installed, open Main.py file with Python 3.7.
+With everything installed, open Main.py file with Python 3.7.
 If you want to change the array size, or the algorithm, go to Main.py file:
 ```python
 ARRAY_SIZE = # Select your size, max value is 1500.
