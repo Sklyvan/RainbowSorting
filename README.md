@@ -49,5 +49,5 @@ def Sorting_Algorithm(MyArray, Win, Font):
     MyArray.isSorted = True
     return MyArray
 # Finally, go to Main.py, and at line 8, add to it the name of your algoritm.
-from Sorting_Algorithms import InsertionSort, CocktailShakerSort, BubbleSort, TimSort, Sorting_Algorithm
+from Sorting_Algorithms import InsertionSort, CocktailShakerSort, BubbleSort, TimSort
 ```
