@@ -30,7 +30,6 @@ def Sorting_Algorithm(Array): # Example algorithm, without visualization.
     # Here goes sorting operations.
     return Array
     
-    
 def Sorting_Algorithm(MyArray, Win, Font):
     # Here goes sorting operations.
     # Change every part where you are using Array, and replace it by MyArray.Array. (Except return).
@@ -48,6 +47,7 @@ def Sorting_Algorithm(MyArray, Win, Font):
     .
     MyArray.isSorted = True
     return MyArray
+    
 # Finally, go to Main.py, and at line 8, add to it the name of your algoritm.
 from Sorting_Algorithms import InsertionSort, CocktailShakerSort, BubbleSort, TimSort
 ```
