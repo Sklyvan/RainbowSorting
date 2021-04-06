@@ -2,7 +2,7 @@
 [Python 3.7](https://www.python.org/) software to visualize an array, using common sorting algorithms to visualize how this algorithms are working.
 ## Installation
 
-Use the package manager [pip](https://pip.pypa.io/en/stable/) to install PyGame, NumPy, PyAudio
+Use the package manager [pip](https://pip.pypa.io/en/stable/) to install [PyGame](https://www.pygame.org/news), [NumPy](https://numpy.org/), [PyAudio](https://pypi.org/project/PyAudio/)
 
 ```bash
 pip install pygame
