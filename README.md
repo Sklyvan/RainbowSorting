@@ -39,7 +39,7 @@ def Sorting_Algorithm(MyArray, Win, Font):
     Now every time that your algorithm access to the array, 
     add this code, to visualize the changes:
     """
-    # Add to this list the elements that your moving on this step.
+    # Add to this list the elements that you are moving on this step.
     MyArray.Moving_Elements = [a, b, c, d...]
     KEY = KEY_PRESSED()
     if KEY == "QUIT":
