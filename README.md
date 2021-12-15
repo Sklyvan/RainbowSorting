@@ -32,10 +32,15 @@ def Sorting_Algorithm(Array): # Example algorithm, without visualization.
     return Array
     
 def Sorting_Algorithm(MyArray, Win, Font):
-    # Here goes sorting operations.
-    # Change every part where you are using Array, and replace it by MyArray.Array. (Except return).
-    # Now every time that your algorithm access to the array, add this code, to visualize the changes:
-    MyArray.Moving_Elements = [a, b, c, d...] # Add to this list the elements that your moving on this step.
+    """
+    Here goes sorting operations.
+    Change every part where you are using Array, 
+    and replace it by MyArray.Array. (Except return)
+    Now every time that your algorithm access to the array, 
+    add this code, to visualize the changes:
+    """
+    # Add to this list the elements that your moving on this step.
+    MyArray.Moving_Elements = [a, b, c, d...]
     KEY = KEY_PRESSED()
     if KEY == "QUIT":
         pygame.quit()
