@@ -1,4 +1,4 @@
-# Rainbow Sorting
+![](./Logo.png)
 ## Array Visualizer 🍭
 [Python 3.7](https://www.python.org/) software to visualize an array, using common sorting algorithms to visualize how this algorithms are working.
 ## Installation
